@@ -2,6 +2,7 @@
 
 from telethon import events
 from telethon.sessions import StringSession
+
 from motor import motor_asyncio
 import aiohttp
 import json
@@ -10,6 +11,10 @@ import logging
 import os
 import re
 
+if os.path.exists('log.txt'):
+    os.remove("log.txt")
+else:
+    print("Log file not found, starting app...")
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -30,11 +35,10 @@ if ENV:
     INSPECTORS = list(int(x) for x in os.environ.get("INSPECTORS", "").split())
     ENFORCERS = list(int(x) for x in os.environ.get("ENFORCERS", "").split())
     MONGO_DB_URL = os.environ.get("MONGO_DB_URL")
-    Sibyl_logs = (os.environ.get("Sibyl_logs"))
-    Sibyl_approved_logs = (os.environ.get("Sibyl_Approved_Logs"))
+    Sibyl_logs = int(os.environ.get("Sibyl_logs"))
+    Sibyl_approved_logs = int(os.environ.get("Sibyl_Approved_Logs"))
     GBAN_MSG_LOGS = int(os.environ.get("GBAN_MSG_LOGS"))
     BOT_TOKEN = os.environ.get("BOT_TOKEN")
-
 else:
     import Sibyl_System.config as Config
 
@@ -122,3 +126,4 @@ def system_cmd(
     if force_reply:
         args["func"] = lambda e: e.is_reply
     return events.NewMessage(**args)
+
